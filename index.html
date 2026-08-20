@@ -372,7 +372,7 @@
   ];
 
   // ===== 状态 =====
-  let stickerOrder = [...STICKERS];
+  let stickerOrder = shuffleArray([...STICKERS]);
   let assignments = {}; // stickerId -> characterId
   let matchedStickers = new Set();
 
@@ -543,6 +543,13 @@
   }
 
   // ===== 操作 =====
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
   function shuffleStickers() {
     // 重置
     assignments = {};
@@ -550,12 +557,7 @@
     milestonesShown = new Set();
     document.querySelectorAll('.char-slot').forEach(s => s.classList.remove('correct', 'wrong', 'drag-over'));
     // Fisher-Yates 打乱
-    const arr = [...STICKERS];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    stickerOrder = arr;
+    stickerOrder = shuffleArray([...STICKERS]);
     document.getElementById('result').textContent = '';
     document.getElementById('result').className = 'result';
     renderStickers();
@@ -604,7 +606,7 @@
     matchedStickers = new Set();
     milestonesShown = new Set();
     document.querySelectorAll('.char-slot').forEach(s => s.classList.remove('correct', 'wrong', 'drag-over'));
-    stickerOrder = [...STICKERS];
+    stickerOrder = shuffleArray([...STICKERS]);
     document.getElementById('result').textContent = '';
     document.getElementById('result').className = 'result';
     renderStickers();
