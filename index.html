@@ -136,6 +136,7 @@
     .panel { padding: 12px; }
     .sticker-sheet { grid-template-columns: 1fr; }
     .sticker { padding: 12px 14px; }
+    .sticker .chibi { width: 74px; height: 74px; }
     .sticker .costume { font-size: 0.88rem; }
     .char-slot { padding: 12px 14px; }
     .char-slot .name { font-size: 0.92rem; }
@@ -181,6 +182,9 @@
     box-shadow: 2px 3px 0 rgba(0,0,0,0.06);
     user-select: none;
     touch-action: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   .sticker:hover {
     transform: rotate(-1.5deg) scale(1.02);
@@ -198,6 +202,17 @@
     margin-top: 6px;
     font-style: italic;
   }
+
+  .sticker .chibi {
+    width: 92px;
+    height: 92px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sticker .chibi svg { width: 100%; height: 100%; display: block; }
+  .sticker-text { flex: 1; min-width: 0; }
 
   /* 人物槽 */
   .char-list {
@@ -357,8 +372,8 @@
     position: fixed;
     z-index: 9999;
     pointer-events: none;
-    width: 280px;
-    max-width: 58vw;
+    width: 300px;
+    max-width: 62vw;
     background: var(--sticker);
     border: 2px solid var(--gold);
     border-radius: 14px;
@@ -366,7 +381,13 @@
     box-shadow: 6px 8px 18px rgba(0,0,0,0.28);
     opacity: 0.92;
     transform: rotate(-2deg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
+  .drag-ghost .chibi { width: 72px; height: 72px; flex-shrink: 0; }
+  .drag-ghost .chibi svg { width: 100%; height: 100%; display: block; }
+  .drag-ghost .sticker-text { flex: 1; min-width: 0; }
   .drag-ghost .costume {
     font-size: 0.92rem;
     color: #4a3f30;
@@ -479,7 +500,26 @@
     { id: 'aladdin', name: '阿拉丁 Aladdin', source: '《阿拉丁》' },
     { id: 'orpheus', name: '奥菲斯 Orpheus', source: '《冥界》' },
     { id: 'euridice', name: '欧律狄刻 Eurydice', source: '《冥界》' },
-  ];  // ===== 状态 =====
+  ];  // ===== Q版小人图（手绘 SVG，随卡片一起展示） =====
+  const CHIBI_SVGS = {
+    'phantom': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#2f2a26"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><path d="M38 74 q-4 16 4 28 l4 -2 q-6 -12 -4 -26z" fill="#2f2a26"/><path d="M82 74 q4 16 -4 28 l-4 -2 q6 -12 4 -26z" fill="#2f2a26"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><ellipse cx="70" cy="60" rx="7" ry="9" fill="#f7f3ec"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#26221f"/><rect x="52" y="78" width="16" height="10" rx="4" fill="#fffdf7"/><path d="M56 82 l4 4 l4 -4" stroke="#1a1715" stroke-width="2.5" fill="none"/><path d="M78 88 q9 -2 12 3 q-4 7 -12 4z" fill="#c0392b"/><path d="M80 94 l-2 8" stroke="#4f7a3d" stroke-width="2" stroke-linecap="round"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'christine': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#f0c75e"/><path d="M42 50 q-5 18 -2 28 q2 4 6 4 q-2 -8 -2 -16 q0 -12 5 -16z" fill="#f0c75e"/><path d="M78 50 q5 18 2 28 q-2 4 -6 4 q2 -8 2 -16 q0 -12 -5 -16z" fill="#f0c75e"/><circle cx="60" cy="58" r="20" fill="#f7dcc8"/><circle cx="60" cy="35" r="6" fill="#f0c75e"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#fffdf7"/><rect x="38" y="90" width="44" height="6" rx="3" fill="#7fb3d5"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'valjean': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#8d8578"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#7d7a6d"/><rect x="46" y="72" width="28" height="10" rx="3" fill="#fffdf7"/><rect x="56" y="76" width="8" height="5" rx="2" fill="#c0392b"/><path d="M88 104 l2 -24" stroke="#6b5638" stroke-width="3" stroke-linecap="round"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'fantine': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#b3422f"/><path d="M42 50 q-6 22 -2 34 q1 4 5 4 q-1 -10 0 -18 q1 -14 7 -20z" fill="#b3422f"/><path d="M78 50 q6 22 2 34 q-1 4 -5 4 q1 -10 0 -18 q-1 -14 -7 -20z" fill="#b3422f"/><circle cx="60" cy="58" r="20" fill="#f7dcc8"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#fdf6ec"/><path d="M38 84 q22 -8 44 0 l0 8 q-22 -8 -44 0z" fill="#5b8dc9"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'cosette': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#d9b87c"/><path d="M42 50 q-5 18 -2 28 q2 4 6 4 q-2 -8 -2 -16 q0 -12 5 -16z" fill="#d9b87c"/><path d="M78 50 q5 18 2 28 q-2 4 -6 4 q2 -8 2 -16 q0 -12 -5 -16z" fill="#d9b87c"/><circle cx="60" cy="58" r="20" fill="#f7dcc8"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#5b8dc9"/><circle cx="46" cy="94" r="2.6" fill="#fffdf7"/><circle cx="58" cy="98" r="2.6" fill="#fffdf7"/><circle cx="70" cy="94" r="2.6" fill="#fffdf7"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'hamilton': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#6b4a2f"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#2c3e50"/><rect x="52" y="78" width="16" height="8" rx="3" fill="#fffdf7"/><rect x="38" y="98" width="44" height="6" rx="3" fill="#c9b18a"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'belle': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#8a5a34"/><path d="M42 50 q-5 18 -2 28 q2 4 6 4 q-2 -8 -2 -16 q0 -12 5 -16z" fill="#8a5a34"/><path d="M78 50 q5 18 2 28 q-2 4 -6 4 q2 -8 2 -16 q0 -12 -5 -16z" fill="#8a5a34"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="60" cy="35" r="6" fill="#8a5a34"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#f4c542"/><circle cx="36" cy="86" r="6" fill="#f4c542"/><circle cx="84" cy="86" r="6" fill="#f4c542"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'elphaba': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#26221f"/><path d="M42 50 q-4 20 -1 30 q1 4 5 4 q-1 -10 -1 -18 q0 -14 5 -18z" fill="#26221f"/><path d="M78 50 q4 20 1 30 q-1 4 -5 4 q1 -10 1 -18 q0 -14 -5 -18z" fill="#26221f"/><circle cx="60" cy="58" r="20" fill="#7fbf73"/><circle cx="51" cy="60" r="2.3" fill="#2a3323"/><circle cx="69" cy="60" r="2.3" fill="#2a3323"/><path d="M57 66 Q60 69 63 66" stroke="#4a7a44" stroke-width="1.6" fill="none" stroke-linecap="round"/><polygon points="56,42 64,42 60,18" fill="#26221f"/><rect x="52" y="40" width="16" height="5" rx="2" fill="#26221f"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#2b2b31"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'glinda': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#f0c75e"/><path d="M42 50 q-4 16 -1 26 q2 5 6 5 q-1 -8 -1 -15 q0 -14 5 -18z" fill="#f0c75e"/><path d="M78 50 q4 16 1 26 q-2 5 -6 5 q1 -8 1 -15 q0 -14 -5 -18z" fill="#f0c75e"/><circle cx="60" cy="58" r="20" fill="#f7dcc8"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M55 30 l2 4 l3 -4 l2 5 l2 -5 l3 4 l2 -4 l-1 6 l-6 3 l-6 -3z" fill="#d4a017"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#f7a8c4"/><circle cx="36" cy="86" r="6" fill="#f7a8c4"/><circle cx="84" cy="86" r="6" fill="#f7a8c4"/><path d="M84 84 l6 -14" stroke="#d4a017" stroke-width="2.5" stroke-linecap="round"/><circle cx="91" cy="68" r="3" fill="#f0c75e"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'marypoppins': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#4a3a30"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="60" cy="36" r="6" fill="#4a3a30"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#3f3f46"/><path d="M57 70 l3 3 l-3 3 l-3 -3z" fill="#c0392b"/><path d="M82 78 l8 -30" stroke="#3f3f46" stroke-width="2.5" stroke-linecap="round"/><path d="M84 46 q11 -8 24 -3 q-12 3 -24 3z" fill="#c0392b"/><path d="M84 46 q11 -4 22 0 q-11 1 -22 0z" fill="#d4a017"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'roxie': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#2b2320"/><path d="M40 54 q-3 12 -2 20 q1 4 5 4 q-1 -8 -1 -14 q0 -10 4 -12z" fill="#2b2320"/><path d="M80 54 q3 12 2 20 q-1 4 -5 4 q1 -8 1 -14 q0 -10 -4 -12z" fill="#2b2320"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M56 40 q-7 -8 -13 -16 q10 1 13 16z" fill="#c0392b"/><path d="M60 40 q-3 -9 -8 -13 q9 2 8 13z" fill="#f0c75e"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#3a3a3a"/><circle cx="48" cy="86" r="1.6" fill="#f0c75e"/><circle cx="58" cy="82" r="1.6" fill="#f0c75e"/><circle cx="68" cy="88" r="1.6" fill="#f0c75e"/><circle cx="74" cy="80" r="1.6" fill="#f0c75e"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'evan': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#7a5233"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="34" y="80" width="12" height="20" rx="5" fill="#5f7a9e"/><rect x="74" y="80" width="12" height="20" rx="5" fill="#5f7a9e"/><rect x="40" y="78" width="40" height="24" rx="12" fill="#3f7fd4"/><rect x="48" y="76" width="24" height="8" rx="3" fill="#2f63a8"/><rect x="78" y="80" width="13" height="19" rx="6" fill="#f2f2f2"/><path d="M83 86 l5 5" stroke="#c9c9c9" stroke-width="2"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'simba': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><circle cx="60" cy="58" r="25" fill="#b06f2a"/><circle cx="42" cy="42" r="7" fill="#b06f2a"/><circle cx="78" cy="42" r="7" fill="#b06f2a"/><circle cx="42" cy="42" r="3.5" fill="#f0b45f"/><circle cx="78" cy="42" r="3.5" fill="#f0b45f"/><circle cx="60" cy="58" r="17" fill="#f0b45f"/><circle cx="51" cy="58" r="2.4" fill="#3a312a"/><circle cx="69" cy="58" r="2.4" fill="#3a312a"/><path d="M57 63 l6 0 l-3 4z" fill="#7a4a20"/><path d="M44 60 l-6 -2" stroke="#7a4a20" stroke-width="1.6" stroke-linecap="round"/><path d="M44 64 l-6 2" stroke="#7a4a20" stroke-width="1.6" stroke-linecap="round"/><path d="M76 60 l6 -2" stroke="#7a4a20" stroke-width="1.6" stroke-linecap="round"/><path d="M76 64 l6 2" stroke="#7a4a20" stroke-width="1.6" stroke-linecap="round"/><rect x="40" y="80" width="40" height="22" rx="11" fill="#f0b45f"/><path d="M78 84 q8 4 10 14" stroke="#b06f2a" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="89" cy="100" r="3" fill="#b06f2a"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'aladdin': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#2b2320"/><circle cx="60" cy="58" r="20" fill="#e8b48f"/><rect x="52" y="32" width="16" height="13" rx="4" fill="#c0392b"/><circle cx="60" cy="47" r="2" fill="#f0c75e"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#6d4fa0"/><rect x="48" y="78" width="24" height="12" rx="5" fill="#fffdf7"/><rect x="38" y="99" width="44" height="6" rx="3" fill="#3f7fd4"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'orpheus': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#2f2a26"/><path d="M42 50 a18 13 0 0 1 36 0 l-2 -2 q-16 -10 -32 0z" fill="#c0392b"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#7a6a52"/><rect x="50" y="78" width="20" height="8" rx="3" fill="#fffdf7"/><circle cx="82" cy="66" r="7" fill="#8a5a34"/><circle cx="82" cy="66" r="4" fill="#6b4526"/><rect x="77" y="72" width="10" height="26" rx="4" fill="#b06f2a"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+    'euridice': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#3d2b1f"/><path d="M42 50 q-5 20 -1 30 q1 4 5 4 q-1 -10 -1 -18 q0 -14 5 -18z" fill="#3d2b1f"/><path d="M78 50 q5 20 1 30 q-1 4 -5 4 q1 -10 1 -18 q0 -14 -5 -18z" fill="#3d2b1f"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#4f9d5f"/><rect x="38" y="90" width="44" height="5" rx="2" fill="#d4a017"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
+  };
+  // ===== 状态 =====
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -514,8 +554,9 @@
       el.className = 'sticker' + (matchedStickers.has(s.id) ? ' matched' : '');
       el.dataset.id = s.id;
       el.innerHTML =
-        '<div class="costume">' + s.costume + '</div>' +
-        '<div class="hint">💡 ' + s.hint + '</div>';
+        '<div class="chibi">' + (CHIBI_SVGS[s.answer] || '') + '</div>' +
+        '<div class="sticker-text"><div class="costume">' + s.costume + '</div>' +
+        '<div class="hint">💡 ' + s.hint + '</div></div>';
       el.addEventListener('pointerdown', onPointerDown);
       el.addEventListener('pointermove', onPointerMove);
       el.addEventListener('pointerup', onPointerUp);
