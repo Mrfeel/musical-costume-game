@@ -16,6 +16,19 @@
     --correct: #27ae60;
     --wrong: #e74c3c;
     --shadow: 0 4px 16px rgba(0,0,0,0.12);
+    --text: #3d3226;
+    --muted: #7a6e5d;
+    --btn-bg: #ffffff;
+    --progress-track: #f0e6d2;
+    --char-border: #b8c8e8;
+    --char-name: #2c3e50;
+    --source-bg: #e8eef7;
+    --source-text: #8a9bb5;
+    --placed: #6a5a48;
+    --drag-over-bg: #d4e4ff;
+    --correct-bg: #d5f5e3;
+    --wrong-bg: #fadbd8;
+    --footer: #a09080;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,11 +36,13 @@
   body {
     font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
     background: var(--bg);
-    color: #3d3226;
+    color: var(--text);
     min-height: 100vh;
     padding: 24px;
     line-height: 1.6;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
     touch-action: manipulation;
   }
 
@@ -44,7 +59,7 @@
   }
 
   header p {
-    color: #7a6e5d;
+    color: var(--muted);
     font-size: 0.95rem;
   }
 
@@ -78,31 +93,31 @@
     background: var(--accent);
     color: #fff;
   }
-  .btn-check:hover { background: #a93226; transform: translateY(-1px); }
+  .btn-check:hover { filter: brightness(0.9); transform: translateY(-1px); }
 
   .btn-reset {
-    background: #fff;
+    background: var(--btn-bg);
     color: var(--accent);
     border: 2px solid var(--accent);
   }
-  .btn-reset:hover { background: #fdf2f0; }
+  .btn-reset:hover { filter: brightness(0.96); }
 
   .btn-undo {
-    background: #fff;
+    background: var(--btn-bg);
     color: var(--gold);
     border: 2px solid var(--gold);
   }
-  .btn-undo:hover { background: #fdf8e8; }
+  .btn-undo:hover { filter: brightness(0.96); }
 
   .btn-shuffle {
     background: var(--gold);
     color: #fff;
   }
-  .btn-shuffle:hover { background: #b8860b; }
+  .btn-shuffle:hover { filter: brightness(0.9); }
 
   .progress-wrap { max-width: 1200px; margin: 0 auto 18px; }
   .progress-bar {
-    background: #f0e6d2;
+    background: var(--progress-track);
     border: 1px solid var(--border);
     border-radius: 999px;
     height: 10px;
@@ -117,7 +132,7 @@
   }
   .progress-text {
     text-align: center;
-    color: #7a6e5d;
+    color: var(--muted);
     font-size: 0.85rem;
     margin-top: 6px;
   }
@@ -136,12 +151,14 @@
     .panel { padding: 12px; }
     .sticker-sheet { grid-template-columns: 1fr; }
     .sticker { padding: 12px 14px; }
-    .sticker .chibi { width: 74px; height: 74px; }
     .sticker .costume { font-size: 0.88rem; }
     .char-slot { padding: 12px 14px; }
+    .char-slot { min-height: 64px; }
     .char-slot .name { font-size: 0.92rem; }
     header h1 { font-size: 1.5rem; }
     header p { font-size: 0.82rem; }
+    .toolbar button { padding: 10px 14px; }
+    .diff-group button { padding: 10px 12px; }
   }
 
   .panel {
@@ -194,24 +211,15 @@
   .sticker:active { cursor: grabbing; }
   .sticker .costume {
     font-size: 0.92rem;
-    color: #4a3f30;
+    color: var(--text);
   }
   .sticker .hint {
     font-size: 0.75rem;
-    color: #9a8c7a;
+    color: var(--muted);
     margin-top: 6px;
     font-style: italic;
   }
 
-  .sticker .chibi {
-    width: 92px;
-    height: 92px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .sticker .chibi svg { width: 100%; height: 100%; display: block; }
   .sticker-text { flex: 1; min-width: 0; }
 
   /* 人物槽 */
@@ -223,7 +231,7 @@
 
   .char-slot {
     background: var(--char);
-    border: 2px dashed #b8c8e8;
+    border: 2px dashed var(--char-border);
     border-radius: 12px;
     padding: 14px 18px;
     display: flex;
@@ -245,14 +253,14 @@
   .char-slot .name {
     font-weight: 600;
     font-size: 1rem;
-    color: #2c3e50;
+    color: var(--char-name);
     flex: 1;
   }
 
   .char-slot .source {
     font-size: 0.72rem;
-    color: #8a9bb5;
-    background: #e8eef7;
+    color: var(--source-text);
+    background: var(--source-bg);
     padding: 2px 8px;
     border-radius: 8px;
     flex-shrink: 0;
@@ -260,7 +268,7 @@
 
   .char-slot .placed {
     font-size: 0.82rem;
-    color: #6a5a48;
+    color: var(--placed);
     font-style: italic;
     flex: 1;
   }
@@ -272,14 +280,14 @@
   }
 
   .char-slot.drag-over {
-    background: #d4e4ff;
+    background: var(--drag-over-bg);
     border-color: var(--gold);
     border-style: solid;
     transform: scale(1.01);
   }
 
   .char-slot.correct {
-    background: #d5f5e3;
+    background: var(--correct-bg);
     border-color: var(--correct);
     border-style: solid;
   }
@@ -287,7 +295,7 @@
   .char-slot.correct .name { color: var(--correct); }
 
   .char-slot.wrong {
-    background: #fadbd8;
+    background: var(--wrong-bg);
     border-color: var(--wrong);
     border-style: solid;
   }
@@ -297,7 +305,7 @@
   .sticker.matched {
     opacity: 0.5;
     border-style: dashed;
-    border-color: #ccc;
+    border-color: var(--border);
     cursor: default;
     pointer-events: none;
   }
@@ -324,7 +332,7 @@
   footer {
     text-align: center;
     margin-top: 32px;
-    color: #a09080;
+    color: var(--footer);
     font-size: 0.8rem;
   }
 
@@ -334,7 +342,7 @@
     gap: 20px;
     margin-bottom: 16px;
     font-size: 0.82rem;
-    color: #7a6e5d;
+    color: var(--muted);
     flex-wrap: wrap;
   }
   .legend span { display: flex; align-items: center; gap: 6px; }
@@ -385,16 +393,14 @@
     align-items: center;
     gap: 10px;
   }
-  .drag-ghost .chibi { width: 72px; height: 72px; flex-shrink: 0; }
-  .drag-ghost .chibi svg { width: 100%; height: 100%; display: block; }
   .drag-ghost .sticker-text { flex: 1; min-width: 0; }
   .drag-ghost .costume {
     font-size: 0.92rem;
-    color: #4a3f30;
+    color: var(--text);
   }
   .drag-ghost .hint {
     font-size: 0.75rem;
-    color: #9a8c7a;
+    color: var(--muted);
     margin-top: 6px;
     font-style: italic;
   }
@@ -413,6 +419,55 @@
     0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
     100% { opacity: 0; transform: translate(var(--dx), 88vh) rotate(var(--dr)); }
   }
+
+  /* ===== 音效 / 主题 / 难度按钮 ===== */
+  .btn-tool {
+    background: var(--btn-bg);
+    color: var(--muted);
+    border: 2px solid var(--border);
+  }
+  .btn-tool:hover { filter: brightness(0.96); }
+
+  .diff-group {
+    display: inline-flex;
+    background: var(--btn-bg);
+    border: 2px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .diff-group button {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  .diff-group button.active {
+    background: var(--gold);
+    color: #fff;
+  }
+
+  /* ===== 主题（body[data-theme] 一键切换） ===== */
+  body[data-theme="stage"] {
+    --bg: #12141c; --paper: #1d2130; --sticker: #262c3f; --char: #262c3f;
+    --border: #3a4160; --accent: #ff6b6b; --gold: #ffd166;
+    --text: #f0ead6; --muted: #9aa0b8;
+    --btn-bg: #262c3f; --progress-track: #262c3f;
+    --char-border: #3a4160; --char-name: #f0ead6;
+    --source-bg: #323a56; --source-text: #9aa0b8; --placed: #4ecdc4;
+    --drag-over-bg: #2c3350; --correct-bg: rgba(46, 204, 113, 0.16); --wrong-bg: rgba(231, 76, 60, 0.16);
+    --footer: #5a6080;
+  }
+  body[data-theme="fresh"] {
+    --bg: #eef4fb; --paper: #ffffff; --sticker: #f8fbff; --char: #f0f6ff;
+    --border: #c9d8ec; --accent: #2980b9; --gold: #e67e22;
+    --text: #2c3e50; --muted: #7f8fa6;
+    --btn-bg: #ffffff; --progress-track: #e8eef7;
+    --char-border: #c9d8ec; --char-name: #2c3e50;
+    --source-bg: #e8eef7; --source-text: #7f8fa6; --placed: #2980b9;
+    --drag-over-bg: #d4e4ff; --correct-bg: #d5f5e3; --wrong-bg: #fdeaea;
+    --footer: #9aa7b8;
+  }
 </style></head>
 <body>
 
@@ -429,10 +484,16 @@
 </div>
 
 <div class="toolbar">
+  <div class="diff-group">
+    <button class="btn-diff" data-diff="easy" onclick="setDifficulty('easy')">🔰 简易 8</button>
+    <button class="btn-diff" data-diff="full" onclick="setDifficulty('full')">🔰 全量 16</button>
+  </div>
   <button class="btn-shuffle" onclick="shuffleStickers()">🔀 随机打乱</button>
   <button class="btn-undo" onclick="undoLast()">↩ 撤销</button>
   <button class="btn-check" onclick="checkAll()">✅ 检查答案</button>
   <button class="btn-reset" onclick="resetAll()">↺ 重置</button>
+  <button class="btn-tool" id="btnSound" onclick="toggleSound()">🔊 音效</button>
+  <button class="btn-tool" id="btnTheme" onclick="cycleTheme()">🎨 歌剧院</button>
 </div>
 
 <div class="progress-wrap">
@@ -466,7 +527,7 @@
   // 每个人物: { id, name, source }
   const STICKERS = [
     { id: 's1', costume: '黑色斗篷、白色半脸面具、白衬衫、黑领结，手执红玫瑰', hint: '半脸面具是最大特征', source: '歌剧魅影', answer: 'phantom' },
-    { id: 's2', costume: '白色芭蕾舞裙、蓝色丝带、金色长发、粉色丝带', hint: '芭蕾舞裙+丝带', source: '歌剧魅影', answer: 'christine' },
+    { id: 's2', costume: '白色芭蕾舞裙、蓝色丝带、粉色丝带', hint: '芭蕾舞裙+丝带', source: '歌剧魅影', answer: 'christine' },
     { id: 's3', costume: '棕色呢子大衣、高顶礼帽、外套上别着一枚红缎带', hint: '红缎带是标志', source: '悲惨世界', answer: 'valjean' },
     { id: 's4', costume: '白色内衬长裙、蓝色披肩、红色头发，后期衣衫凌乱', hint: '红发+蓝披肩', source: '悲惨世界', answer: 'fantine' },
     { id: 's5', costume: '蓝色优雅长裙、白色裙摆缀满花朵、珍珠项链', hint: '白裙+花朵', source: '悲惨世界', answer: 'cosette' },
@@ -479,7 +540,7 @@
     { id: 's12', costume: '蓝色POLO衫、牛仔夹克、手臂上戴着石膏护臂', hint: '石膏护臂是关键', source: '致埃文·汉森', answer: 'evan' },
     { id: 's13', costume: '金色狮子鬃毛头套、棕色/金色身体装', hint: '狮子鬃毛', source: '狮子王', answer: 'simba' },
     { id: 's14', costume: '紫色马甲、蓝色灯笼裤、红色头巾、棕色靴子', hint: '紫马甲+红头巾', source: '阿拉丁', answer: 'aladdin' },
-    { id: 's15', costume: '红色鸭舌帽、破旧呢子大衣、肩挎吉他', hint: '红帽+吉他', source: '冥界', answer: 'orpheus' },
+    { id: 's15', costume: '破旧呢子大衣、肩挎吉他', hint: '大衣+吉他', source: '冥界', answer: 'orpheus' },
     { id: 's16', costume: '绿色连衣裙、金色腰带、深色卷发', hint: '绿裙+金腰带', source: '冥界', answer: 'euridice' },
   ];
 
@@ -501,25 +562,84 @@
     { id: 'orpheus', name: '奥菲斯 Orpheus', source: '《冥界》' },
     { id: 'euridice', name: '欧律狄刻 Eurydice', source: '《冥界》' },
   ];  // ===== Q版小人图（手绘 SVG，随卡片一起展示） =====
-  const CHIBI_SVGS = {
-    'phantom': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#2f2a26"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><path d="M38 74 q-4 16 4 28 l4 -2 q-6 -12 -4 -26z" fill="#2f2a26"/><path d="M82 74 q4 16 -4 28 l-4 -2 q6 -12 4 -26z" fill="#2f2a26"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><ellipse cx="70" cy="60" rx="7" ry="9" fill="#f7f3ec"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#26221f"/><rect x="52" y="78" width="16" height="10" rx="4" fill="#fffdf7"/><path d="M56 82 l4 4 l4 -4" stroke="#1a1715" stroke-width="2.5" fill="none"/><path d="M78 88 q9 -2 12 3 q-4 7 -12 4z" fill="#c0392b"/><path d="M80 94 l-2 8" stroke="#4f7a3d" stroke-width="2" stroke-linecap="round"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'christine': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#f0c75e"/><path d="M42 50 q-5 18 -2 28 q2 4 6 4 q-2 -8 -2 -16 q0 -12 5 -16z" fill="#f0c75e"/><path d="M78 50 q5 18 2 28 q-2 4 -6 4 q2 -8 2 -16 q0 -12 -5 -16z" fill="#f0c75e"/><circle cx="60" cy="58" r="20" fill="#f7dcc8"/><circle cx="60" cy="35" r="6" fill="#f0c75e"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#fffdf7"/><rect x="38" y="90" width="44" height="6" rx="3" fill="#7fb3d5"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'valjean': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#8d8578"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#7d7a6d"/><rect x="46" y="72" width="28" height="10" rx="3" fill="#fffdf7"/><rect x="56" y="76" width="8" height="5" rx="2" fill="#c0392b"/><path d="M88 104 l2 -24" stroke="#6b5638" stroke-width="3" stroke-linecap="round"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'fantine': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#b3422f"/><path d="M42 50 q-6 22 -2 34 q1 4 5 4 q-1 -10 0 -18 q1 -14 7 -20z" fill="#b3422f"/><path d="M78 50 q6 22 2 34 q-1 4 -5 4 q1 -10 0 -18 q-1 -14 -7 -20z" fill="#b3422f"/><circle cx="60" cy="58" r="20" fill="#f7dcc8"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#fdf6ec"/><path d="M38 84 q22 -8 44 0 l0 8 q-22 -8 -44 0z" fill="#5b8dc9"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'cosette': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#d9b87c"/><path d="M42 50 q-5 18 -2 28 q2 4 6 4 q-2 -8 -2 -16 q0 -12 5 -16z" fill="#d9b87c"/><path d="M78 50 q5 18 2 28 q-2 4 -6 4 q2 -8 2 -16 q0 -12 -5 -16z" fill="#d9b87c"/><circle cx="60" cy="58" r="20" fill="#f7dcc8"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#5b8dc9"/><circle cx="46" cy="94" r="2.6" fill="#fffdf7"/><circle cx="58" cy="98" r="2.6" fill="#fffdf7"/><circle cx="70" cy="94" r="2.6" fill="#fffdf7"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'hamilton': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#6b4a2f"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#2c3e50"/><rect x="52" y="78" width="16" height="8" rx="3" fill="#fffdf7"/><rect x="38" y="98" width="44" height="6" rx="3" fill="#c9b18a"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'belle': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#8a5a34"/><path d="M42 50 q-5 18 -2 28 q2 4 6 4 q-2 -8 -2 -16 q0 -12 5 -16z" fill="#8a5a34"/><path d="M78 50 q5 18 2 28 q-2 4 -6 4 q2 -8 2 -16 q0 -12 -5 -16z" fill="#8a5a34"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="60" cy="35" r="6" fill="#8a5a34"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#f4c542"/><circle cx="36" cy="86" r="6" fill="#f4c542"/><circle cx="84" cy="86" r="6" fill="#f4c542"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'elphaba': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#26221f"/><path d="M42 50 q-4 20 -1 30 q1 4 5 4 q-1 -10 -1 -18 q0 -14 5 -18z" fill="#26221f"/><path d="M78 50 q4 20 1 30 q-1 4 -5 4 q1 -10 1 -18 q0 -14 -5 -18z" fill="#26221f"/><circle cx="60" cy="58" r="20" fill="#7fbf73"/><circle cx="51" cy="60" r="2.3" fill="#2a3323"/><circle cx="69" cy="60" r="2.3" fill="#2a3323"/><path d="M57 66 Q60 69 63 66" stroke="#4a7a44" stroke-width="1.6" fill="none" stroke-linecap="round"/><polygon points="56,42 64,42 60,18" fill="#26221f"/><rect x="52" y="40" width="16" height="5" rx="2" fill="#26221f"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#2b2b31"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'glinda': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#f0c75e"/><path d="M42 50 q-4 16 -1 26 q2 5 6 5 q-1 -8 -1 -15 q0 -14 5 -18z" fill="#f0c75e"/><path d="M78 50 q4 16 1 26 q-2 5 -6 5 q1 -8 1 -15 q0 -14 -5 -18z" fill="#f0c75e"/><circle cx="60" cy="58" r="20" fill="#f7dcc8"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M55 30 l2 4 l3 -4 l2 5 l2 -5 l3 4 l2 -4 l-1 6 l-6 3 l-6 -3z" fill="#d4a017"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#f7a8c4"/><circle cx="36" cy="86" r="6" fill="#f7a8c4"/><circle cx="84" cy="86" r="6" fill="#f7a8c4"/><path d="M84 84 l6 -14" stroke="#d4a017" stroke-width="2.5" stroke-linecap="round"/><circle cx="91" cy="68" r="3" fill="#f0c75e"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'marypoppins': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#4a3a30"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="60" cy="36" r="6" fill="#4a3a30"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#3f3f46"/><path d="M57 70 l3 3 l-3 3 l-3 -3z" fill="#c0392b"/><path d="M82 78 l8 -30" stroke="#3f3f46" stroke-width="2.5" stroke-linecap="round"/><path d="M84 46 q11 -8 24 -3 q-12 3 -24 3z" fill="#c0392b"/><path d="M84 46 q11 -4 22 0 q-11 1 -22 0z" fill="#d4a017"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'roxie': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#2b2320"/><path d="M40 54 q-3 12 -2 20 q1 4 5 4 q-1 -8 -1 -14 q0 -10 4 -12z" fill="#2b2320"/><path d="M80 54 q3 12 2 20 q-1 4 -5 4 q1 -8 1 -14 q0 -10 -4 -12z" fill="#2b2320"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M56 40 q-7 -8 -13 -16 q10 1 13 16z" fill="#c0392b"/><path d="M60 40 q-3 -9 -8 -13 q9 2 8 13z" fill="#f0c75e"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#3a3a3a"/><circle cx="48" cy="86" r="1.6" fill="#f0c75e"/><circle cx="58" cy="82" r="1.6" fill="#f0c75e"/><circle cx="68" cy="88" r="1.6" fill="#f0c75e"/><circle cx="74" cy="80" r="1.6" fill="#f0c75e"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'evan': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#7a5233"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="34" y="80" width="12" height="20" rx="5" fill="#5f7a9e"/><rect x="74" y="80" width="12" height="20" rx="5" fill="#5f7a9e"/><rect x="40" y="78" width="40" height="24" rx="12" fill="#3f7fd4"/><rect x="48" y="76" width="24" height="8" rx="3" fill="#2f63a8"/><rect x="78" y="80" width="13" height="19" rx="6" fill="#f2f2f2"/><path d="M83 86 l5 5" stroke="#c9c9c9" stroke-width="2"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'simba': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><circle cx="60" cy="58" r="25" fill="#b06f2a"/><circle cx="42" cy="42" r="7" fill="#b06f2a"/><circle cx="78" cy="42" r="7" fill="#b06f2a"/><circle cx="42" cy="42" r="3.5" fill="#f0b45f"/><circle cx="78" cy="42" r="3.5" fill="#f0b45f"/><circle cx="60" cy="58" r="17" fill="#f0b45f"/><circle cx="51" cy="58" r="2.4" fill="#3a312a"/><circle cx="69" cy="58" r="2.4" fill="#3a312a"/><path d="M57 63 l6 0 l-3 4z" fill="#7a4a20"/><path d="M44 60 l-6 -2" stroke="#7a4a20" stroke-width="1.6" stroke-linecap="round"/><path d="M44 64 l-6 2" stroke="#7a4a20" stroke-width="1.6" stroke-linecap="round"/><path d="M76 60 l6 -2" stroke="#7a4a20" stroke-width="1.6" stroke-linecap="round"/><path d="M76 64 l6 2" stroke="#7a4a20" stroke-width="1.6" stroke-linecap="round"/><rect x="40" y="80" width="40" height="22" rx="11" fill="#f0b45f"/><path d="M78 84 q8 4 10 14" stroke="#b06f2a" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="89" cy="100" r="3" fill="#b06f2a"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'aladdin': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#2b2320"/><circle cx="60" cy="58" r="20" fill="#e8b48f"/><rect x="52" y="32" width="16" height="13" rx="4" fill="#c0392b"/><circle cx="60" cy="47" r="2" fill="#f0c75e"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#6d4fa0"/><rect x="48" y="78" width="24" height="12" rx="5" fill="#fffdf7"/><rect x="38" y="99" width="44" height="6" rx="3" fill="#3f7fd4"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'orpheus': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#2f2a26"/><path d="M42 50 a18 13 0 0 1 36 0 l-2 -2 q-16 -10 -32 0z" fill="#c0392b"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#7a6a52"/><rect x="50" y="78" width="20" height="8" rx="3" fill="#fffdf7"/><circle cx="82" cy="66" r="7" fill="#8a5a34"/><circle cx="82" cy="66" r="4" fill="#6b4526"/><rect x="77" y="72" width="10" height="26" rx="4" fill="#b06f2a"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-    'euridice': '<svg viewBox="0 0 120 120"><circle cx="60" cy="62" r="54" fill="#f3ead8"/><path d="M40 54 a20 20 0 0 1 40 0 l-3 1 q-17 -8 -34 0z" fill="#3d2b1f"/><path d="M42 50 q-5 20 -1 30 q1 4 5 4 q-1 -10 -1 -18 q0 -14 5 -18z" fill="#3d2b1f"/><path d="M78 50 q5 20 1 30 q-1 4 -5 4 q1 -10 1 -18 q0 -14 -5 -18z" fill="#3d2b1f"/><circle cx="60" cy="58" r="20" fill="#f2c9b3"/><circle cx="51" cy="60" r="2.3" fill="#3a312a"/><circle cx="69" cy="60" r="2.3" fill="#3a312a"/><circle cx="45" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><circle cx="75" cy="65" r="3" fill="#f3b8a2" opacity="0.7"/><path d="M57 66 Q60 69 63 66" stroke="#b0553f" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="38" y="78" width="44" height="24" rx="12" fill="#4f9d5f"/><rect x="38" y="90" width="44" height="5" rx="2" fill="#d4a017"/><ellipse cx="60" cy="108" rx="22" ry="4" fill="#000" opacity="0.07"/></svg>',
-  };
   // ===== 状态 =====
+  // ---- 主题 / 音效 / 难度（选择会被记住） ----
+  const THEMES = ['opera', 'stage', 'fresh'];
+  const THEME_LABELS = { opera: '歌剧院', stage: '舞台', fresh: '清新' };
+  const EASY_IDS = ['s1', 's3', 's6', 's7', 's8', 's10', 's13', 's14'];
+  const DIFFS = {
+    easy: { label: '简易', size: 8, milestones: [3, 5] },
+    full: { label: '全量', size: 16, milestones: [5, 10] }
+  };
+
+  function loadPref(key, def) {
+    try { const v = localStorage.getItem(key); return v === null ? def : v; } catch (err) { return def; }
+  }
+  let difficulty = loadPref('costumeDiff', 'easy');
+  let theme = loadPref('costumeTheme', 'opera');
+  let soundOn = loadPref('costumeSound', '1') === '1';
+  let audioCtx = null;
+
+  function activeStickers() { return STICKERS.filter(function(s) { return difficulty === 'easy' ? EASY_IDS.indexOf(s.id) >= 0 : true; }); }
+  function activeChars() {
+    const ids = new Set(activeStickers().map(function(s) { return s.answer; }));
+    return CHARACTERS.filter(function(c) { return ids.has(c.id); });
+  }
+  function totalCount() { return activeStickers().length; }
+  function bestKey() { return 'costumeGameBest_' + difficulty; }
+
+  // ---- 音效（Web Audio，无需素材） ----
+  function ensureAudio() {
+    if (!soundOn) return;
+    if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (err) {} }
+    if (audioCtx && audioCtx.state === 'suspended') { try { audioCtx.resume(); } catch (err) {} }
+  }
+  function tone(freq, start, dur, type, vol) {
+    if (!audioCtx || !soundOn) return;
+    try {
+      const t0 = audioCtx.currentTime + start;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type || 'sine';
+      o.frequency.setValueAtTime(freq, t0);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol || 0.16, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t0); o.stop(t0 + dur + 0.05);
+    } catch (err) {}
+  }
+  function sfxCorrect() { ensureAudio(); tone(523.25, 0, 0.14, 'sine', 0.18); tone(659.25, 0.09, 0.16, 'sine', 0.18); }
+  function sfxWrong() { ensureAudio(); tone(196, 0, 0.22, 'sawtooth', 0.12); tone(147, 0.08, 0.26, 'sawtooth', 0.12); }
+  function sfxMilestone() { ensureAudio(); [523.25, 659.25, 783.99, 1046.5].forEach(function(f, i) { tone(f, i * 0.09, 0.18, 'triangle', 0.2); }); }
+  function sfxWin() { ensureAudio(); [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5].forEach(function(f, i) { tone(f, i * 0.12, 0.22, 'triangle', 0.2); }); }
+
+  // ---- 主题 ----
+  function applyTheme() {
+    document.body.setAttribute('data-theme', theme);
+    const btn = document.getElementById('btnTheme');
+    if (btn) btn.textContent = '🎨 ' + THEME_LABELS[theme];
+    try { localStorage.setItem('costumeTheme', theme); } catch (err) {}
+  }
+  function cycleTheme() { theme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length]; applyTheme(); }
+
+  // ---- 音效开关 ----
+  function updateSoundBtn() {
+    const btn = document.getElementById('btnSound');
+    if (btn) btn.textContent = soundOn ? '🔊 音效' : '🔇 静音';
+    try { localStorage.setItem('costumeSound', soundOn ? '1' : '0'); } catch (err) {}
+  }
+  function toggleSound() { soundOn = !soundOn; updateSoundBtn(); }
+
+  // ---- 难度 ----
+  function setDifficulty(d) {
+    if (difficulty === d) return;
+    difficulty = d;
+    try { localStorage.setItem('costumeDiff', d); } catch (err) {}
+    document.querySelectorAll('.btn-diff').forEach(function(b) { b.classList.toggle('active', b.dataset.diff === d); });
+    freshRound();
+  }
+
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -527,7 +647,7 @@
     }
     return arr;
   }
-  let stickerOrder = shuffleArray([...STICKERS]);
+  let stickerOrder = shuffleArray(activeStickers());
   let assignments = {}; // stickerId -> characterId
   let matchedStickers = new Set();
   let streak = 0;
@@ -554,7 +674,6 @@
       el.className = 'sticker' + (matchedStickers.has(s.id) ? ' matched' : '');
       el.dataset.id = s.id;
       el.innerHTML =
-        '<div class="chibi">' + (CHIBI_SVGS[s.answer] || '') + '</div>' +
         '<div class="sticker-text"><div class="costume">' + s.costume + '</div>' +
         '<div class="hint">💡 ' + s.hint + '</div></div>';
       el.addEventListener('pointerdown', onPointerDown);
@@ -569,7 +688,7 @@
   function renderChars() {
     const list = document.getElementById('charList');
     list.innerHTML = '';
-    CHARACTERS.forEach(c => {
+    activeChars().forEach(c => {
       const el = document.createElement('div');
       el.className = 'char-slot';
       el.dataset.id = c.id;
@@ -585,8 +704,9 @@
   }
 
   function updateCharPlaced() {
-    CHARACTERS.forEach(c => {
+    activeChars().forEach(c => {
       const slot = document.querySelector('.char-slot[data-id="' + c.id + '"]');
+      if (!slot) return;
       const placed = slot.querySelector('.placed');
       const assigned = Object.keys(assignments).filter(k => assignments[k] === c.id);
       if (assigned.length > 0) {
@@ -599,7 +719,7 @@
   }
 
   function updateProgress() {
-    const total = STICKERS.length;
+    const total = totalCount();
     const matched = matchedStickers.size;
     const fill = document.getElementById('progressFill');
     const txt = document.getElementById('progressText');
@@ -616,17 +736,17 @@
   function updateBest() {
     const b = loadBest();
     const el = document.getElementById('bestInfo');
-    if (el) el.textContent = b > 0 ? '🏅 个人最佳：' + b + ' / ' + STICKERS.length : '';
+    if (el) el.textContent = b > 0 ? '🏅 个人最佳：' + b + ' / ' + totalCount() : '';
   }
 
   function loadBest() {
-    try { return parseInt(localStorage.getItem('costumeGameBest') || '0', 10) || 0; } catch (err) { return 0; }
+    try { return parseInt(localStorage.getItem(bestKey()) || '0', 10) || 0; } catch (err) { return 0; }
   }
 
   function saveBest() {
     const m = matchedStickers.size;
     if (m > loadBest()) {
-      try { localStorage.setItem('costumeGameBest', String(m)); } catch (err) {}
+      try { localStorage.setItem(bestKey(), String(m)); } catch (err) {}
     }
   }
 
@@ -775,7 +895,6 @@
       if (oldSlot) oldSlot.classList.remove('correct', 'wrong', 'shake', 'pop');
     }
     assignments[stickerId] = charId;
-    matchedStickers.add(stickerId);
     const slot = document.querySelector('.char-slot[data-id="' + charId + '"]');
     const sticker = STICKERS.find(s => s.id === stickerId);
     const ok = !!(sticker && sticker.answer === charId);
@@ -784,9 +903,10 @@
       slot.classList.add(ok ? 'correct' : 'wrong');
     }
     const stickerEl = document.querySelector('.sticker[data-id="' + stickerId + '"]');
-    if (stickerEl) {
-      stickerEl.classList.add('matched');
-      stickerEl.classList.remove('selected');
+    if (stickerEl) stickerEl.classList.remove('selected');
+    if (ok) {
+      matchedStickers.add(stickerId);
+      if (stickerEl) stickerEl.classList.add('matched');
     }
     updateCharPlaced();
     updateProgress();
@@ -807,20 +927,26 @@
     const ok = setAssignment(stickerId, charId);
     if (ok) {
       streak++;
+      sfxCorrect();
       const slot = document.querySelector('.char-slot[data-id="' + charId + '"]');
       if (slot) { slot.classList.remove('pop'); void slot.offsetWidth; slot.classList.add('pop'); }
-      if (streak === 5) {
-        setResult('🌟 达成 5 连胜！手感越来越好了！', 'success');
-      } else if (streak === 10) {
-        setResult('🏆 十连对！你是音乐剧服装达人吗？', 'success');
-      } else if (matchedStickers.size === STICKERS.length && !completedShown) {
+      const ms = DIFFS[difficulty].milestones;
+      if (streak === ms[0]) {
+        sfxMilestone();
+        setResult('🌟 达成 ' + ms[0] + ' 连胜！手感越来越好了！', 'success');
+      } else if (ms.length > 1 && streak === ms[1]) {
+        sfxMilestone();
+        setResult('🏆 ' + ms[1] + ' 连对！你是音乐剧服装达人吗？', 'success');
+      } else if (matchedStickers.size === totalCount() && !completedShown) {
         completedShown = true;
-        setResult('👑 满分通关！全部 ' + STICKERS.length + ' 个角色都认出来了！', 'success');
+        sfxWin();
+        setResult('👑 满分通关！全部 ' + totalCount() + ' 个角色都认出来了！', 'success');
         celebrate();
       }
     } else {
       mistakes++;
       streak = 0;
+      sfxWrong();
       const slot = document.querySelector('.char-slot[data-id="' + charId + '"]');
       if (slot) { slot.classList.remove('shake'); void slot.offsetWidth; slot.classList.add('shake'); }
       setResult('✗ 配对错了，再试试！', 'error');
@@ -870,7 +996,7 @@
     completedShown = false;
     selectedStickerId = null;
     endDrag();
-    stickerOrder = shuffleArray([...STICKERS]);
+    stickerOrder = shuffleArray(activeStickers());
     document.querySelectorAll('.char-slot').forEach(s => s.classList.remove('correct', 'wrong', 'shake', 'pop', 'drag-over'));
     setResult('', '');
     renderStickers();
@@ -884,7 +1010,7 @@
   function resetAll() { freshRound(); }
 
   function checkAll() {
-    const total = STICKERS.length;
+    const total = totalCount();
     const correct = matchedStickers.size;
     if (correct === total) {
       setResult('🎉 全部正确！太棒了！', 'success');
@@ -900,6 +1026,9 @@
   }
 
   // ===== 初始化 =====
+  applyTheme();
+  updateSoundBtn();
+  document.querySelectorAll('.btn-diff').forEach(function(b) { b.classList.toggle('active', b.dataset.diff === difficulty); });
   renderStickers();
   renderChars();
   updateProgress();
